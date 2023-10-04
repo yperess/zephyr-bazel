@@ -60,14 +60,6 @@ local_repository(
     path = "third_party/pigweed/pw_toolchain_bazel",
 )
 
-# TODO: b/291106264 - Remove the pigweed_config.
-load("@pigweed//pw_build:target_config.bzl", "pigweed_config")
-pigweed_config(
-    name = "pigweed_config",
-    build_file = "@pigweed//targets:default_config.BUILD",
-)
-
-
 # Get ready to grab CIPD dependencies. For this minimal example, the only dependencies will be the toolchains.
 load(
     "@pigweed//pw_env_setup/bazel/cipd_setup:cipd_rules.bzl",
