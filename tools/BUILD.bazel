@@ -11,16 +11,28 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under
 # the License.
+load("@rules_python//python:defs.bzl", "py_binary")
 
-platform(
-    name = "stm32",
-    constraint_values = [
-        # Use the baremetal backend for stm32f429 defined in upstream Pigweed.
-        "@pigweed//pw_sys_io_baremetal_stm32f429:backend",
-        "@platforms//cpu:armv7e-m",
-        "@platforms//os:none",
-        # Target the cortex-m4. Bazel selects the right toolchain based on
-        # this.
-        "@pw_toolchain//constraints/arm_mcpu:cortex-m4+nofp",
+package(default_visibility = ["//visibility:public"])
+
+py_binary(
+    name = "flash",
+    srcs = ["flash.py"],
+    data = [
+        "//src:echo.elf",
+        "@openocd//:bin/openocd",
+        "@pigweed//targets/stm32f429i_disc1/py/stm32f429i_disc1_utils:openocd_stm32f4xx.cfg",
     ],
+    deps = [
+        "@pypi_pyserial//:pkg",
+        "@rules_python//python/runfiles",
+    ],
+)
+
+py_binary(
+  name = "miniterm",
+  srcs = ["miniterm.py"],
+  deps = [
+    "@pypi_pyserial//:pkg",
+  ],
 )

@@ -16,23 +16,44 @@ TODO: b/300695111 - Don't require submodules for this example.
 
 ## Building
 
-To build for the host, run
+We'll assume you already have Bazel on your system. If you don't, the
+recommended way to get it is through
+[Bazelisk](https://github.com/bazelbuild/bazelisk/blob/master/README.md).
+
+To build the entire project (including building the application for both the
+host and the STM32 Discovery Board), run
 
 ```
 bazel build //...
 ```
 
-To build for the STM32 Discovery Board:
+To run the application locally on your machine, run,
 
 ```
-bazel build --platforms=//target:stm32 //...
+bazel run //src:echo
 ```
 
 ## Flashing
 
-TODO: b/299994234 - Add tools and instructions for flashing.
+To flash the firmware to a STM32F429 Discovery Board connected to your machine,
+run,
 
-## Running
+```
+bazel run //tools:flash
+```
 
-TODO: b/299994234 - Add tools and instructions for talking to the device after
-flashing.
+Note that you _don't need to build the firmware first_: Bazel knows that the
+firmware images are needed to flash the board, and will build them for you. And
+if you edit the source of the firmware or any of its dependencies, it will get
+rebuilt when you flash.
+
+## Communicating
+
+Run,
+
+```
+bazel run //tools:miniterm -- /dev/ttyACM0 --filter=debug
+```
+
+to communicate with the board. When you transmit a character, you should get
+the same character back!

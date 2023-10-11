@@ -11,16 +11,9 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under
 # the License.
+"""Spin up a miniterm for talking to the board."""
 
-platform(
-    name = "stm32",
-    constraint_values = [
-        # Use the baremetal backend for stm32f429 defined in upstream Pigweed.
-        "@pigweed//pw_sys_io_baremetal_stm32f429:backend",
-        "@platforms//cpu:armv7e-m",
-        "@platforms//os:none",
-        # Target the cortex-m4. Bazel selects the right toolchain based on
-        # this.
-        "@pw_toolchain//constraints/arm_mcpu:cortex-m4+nofp",
-    ],
-)
+from serial.tools import miniterm
+
+if __name__ == "__main__":
+  miniterm.main(default_baudrate=115200)

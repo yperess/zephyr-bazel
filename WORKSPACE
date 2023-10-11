@@ -34,6 +34,16 @@ http_archive(
     urls = ["https://github.com/bazelbuild/bazel-skylib/archive/refs/tags/1.3.0.zip"],
 )
 
+http_archive(
+    name = "rules_python",
+    sha256 = "0a8003b044294d7840ac7d9d73eef05d6ceb682d7516781a4ec62eeb34702578",
+    strip_prefix = "rules_python-0.24.0",
+    url = "https://github.com/bazelbuild/rules_python/releases/download/0.24.0/rules_python-0.24.0.tar.gz",
+)
+
+load("@rules_python//python:repositories.bzl", "py_repositories")
+
+py_repositories()
 
 http_archive(
     name = "com_google_protobuf",
@@ -60,16 +70,21 @@ local_repository(
     path = "third_party/pigweed/pw_toolchain_bazel",
 )
 
-# Get ready to grab CIPD dependencies. For this minimal example, the only dependencies will be the toolchains.
+# Get ready to grab CIPD dependencies. For this minimal example, the only
+# dependencies will be the toolchains and OpenOCD (used for flashing).
 load(
     "@pigweed//pw_env_setup/bazel/cipd_setup:cipd_rules.bzl",
     "cipd_client_repository",
     "cipd_repository",
     "pigweed_deps",
 )
+
 pigweed_deps()
+
 load("@cipd_deps//:cipd_init.bzl", "cipd_init")
+
 cipd_init()
+
 cipd_client_repository()
 
 # Setup xcode on mac.
@@ -102,5 +117,33 @@ cipd_repository(
 register_toolchains(
     "@pigweed//pw_toolchain/host_clang:host_cc_toolchain_linux",
     "@pigweed//pw_toolchain/host_clang:host_cc_toolchain_macos",
-    "@pigweed//pw_toolchain/arm_gcc:arm_gcc_cc_toolchain_cortex-m4",
+    "@pigweed//pw_toolchain/arm_gcc:arm_gcc_cc_toolchain_cortex-m4+nofp",
 )
+
+# Get the OpenOCD binary (we'll use it for flashing).
+cipd_repository(
+    name = "openocd",
+    path = "infra/3pp/tools/openocd/${os}-${arch}",
+    tag = "version:2@0.11.0-3",
+)
+
+load("@rules_python//python:repositories.bzl", "python_register_toolchains")
+
+# Set up the Python interpreter and PyPI dependencies we'll need.
+python_register_toolchains(
+    name = "python3_10",
+    python_version = "3.10",
+)
+
+load("@python3_10//:defs.bzl", "interpreter")
+load("@rules_python//python:pip.bzl", "pip_parse")
+
+pip_parse(
+    name = "pypi",
+    python_interpreter_target = interpreter,
+    requirements_lock = "//:requirements_lock.txt",
+)
+
+load("@pypi//:requirements.bzl", "install_deps")
+
+install_deps()

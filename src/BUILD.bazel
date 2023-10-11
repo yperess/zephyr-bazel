@@ -11,6 +11,9 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under
 # the License.
+load("//:echo.bzl", "stm32_cc_binary")
+
+package(default_visibility = ["//visibility:public"])
 
 cc_binary(
     name = "echo",
@@ -22,6 +25,7 @@ cc_binary(
     deps = [
         "@pigweed//pw_boot",
         "@pigweed//pw_sys_io",
+        "@pigweed//targets:pw_assert_backend_impl",
     ] + select({
         "@platforms//cpu:armv7e-m": [
             "@pigweed//targets/stm32f429i_disc1:basic_linker_script",
@@ -29,4 +33,9 @@ cc_binary(
         ],
         "//conditions:default": [],
     }),
+)
+
+stm32_cc_binary(
+    name = "echo.elf",
+    binary = ":echo",
 )
