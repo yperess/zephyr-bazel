@@ -15,6 +15,7 @@
 platform(
     name = "stm32",
     constraint_values = [
+        "@pigweed//pw_malloc_freelist:backend",
         # Use the baremetal backend for stm32f429 defined in upstream Pigweed.
         "@pigweed//pw_sys_io_baremetal_stm32f429:backend",
         "@platforms//cpu:armv7e-m",
