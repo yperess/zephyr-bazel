@@ -109,11 +109,11 @@ load("@rules_python//python:repositories.bzl", "python_register_toolchains")
 
 # Set up the Python interpreter and PyPI dependencies we'll need.
 python_register_toolchains(
-    name = "python3_10",
-    python_version = "3.10",
+    name = "python3",
+    python_version = "3.11",
 )
 
-load("@python3_10//:defs.bzl", "interpreter")
+load("@python3//:defs.bzl", "interpreter")
 load("@rules_python//python:pip.bzl", "pip_parse")
 
 pip_parse(
