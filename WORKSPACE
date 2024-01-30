@@ -67,8 +67,12 @@ protobuf_deps()
 
 # Add Pigweed itself, as a submodule.
 #
-# TODO: b/300695111 - Support depending on Pigweed as a git_repository, even if
-# you use pw_toolchain.
+# We use a submodule for simpler integration with our CI. You can use
+# git_repository, too, for both pigweed and pw_toolchain (see
+# http://pwbug.dev/300695111).
+#
+# TODO: http://pwbug.dev/323009830 - Use git_repository here once we support it
+# in CI.
 local_repository(
     name = "pigweed",
     path = "third_party/pigweed",
