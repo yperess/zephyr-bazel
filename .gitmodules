@@ -2,3 +2,6 @@
 	path = third_party/pigweed
 	url = https://pigweed.googlesource.com/pigweed/pigweed
 	branch = main
+[submodule "third_party/zephyr"]
+	path = third_party/zephyr
+	url = git@github.com:yperess/zephyr.git
