@@ -1,7 +1,8 @@
 [submodule "third_party/pigweed"]
 	path = third_party/pigweed
-	url = https://pigweed.googlesource.com/pigweed/pigweed
-	branch = main
+	url = git@github.com:yperess/pigweed.git
+	branch = pw_bazel
 [submodule "third_party/zephyr"]
 	path = third_party/zephyr
 	url = git@github.com:yperess/zephyr.git
+	branch = zephyr-bazel
