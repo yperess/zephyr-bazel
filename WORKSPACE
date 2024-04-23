@@ -83,6 +83,13 @@ local_repository(
     path = "third_party/pigweed/pw_toolchain_bazel",
 )
 
+# Zephyr
+new_local_repository(
+    name = "zephyr",
+    build_file = "//src/pw_devicetree:zephyr.BUILD",
+    path = "third_party/zephyr",
+)
+
 # Get ready to grab CIPD dependencies. For this minimal example, the only
 # dependencies will be the toolchains and OpenOCD (used for flashing).
 load(
