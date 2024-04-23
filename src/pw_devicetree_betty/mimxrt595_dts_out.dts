@@ -1,0 +1,961 @@
+/dts-v1/;
+
+/ {
+	#address-cells = < 0x1 >;
+	#size-cells = < 0x1 >;
+	model = "NXP MIMXRT595-EVK board";
+	compatible = "nxp,mimxrt595";
+	soc {
+		#address-cells = < 0x1 >;
+		#size-cells = < 0x1 >;
+		compatible = "simple-bus";
+		interrupt-parent = < &nvic >;
+		ranges;
+		sram: sram@30000000 {
+			ranges = < 0x0 0x10000000 0x500000 0x20000000 0x30000000 0x500000 >;
+			#address-cells = < 0x1 >;
+			#size-cells = < 0x1 >;
+			sram_code: memory@1b000 {
+				compatible = "mmio-sram";
+				reg = < 0x1b000 0x165000 >;
+			};
+			sram0: memory@20180000 {
+				compatible = "mmio-sram";
+				reg = < 0x20180000 0x300000 >;
+			};
+			sram1: memory@40140000 {
+				compatible = "zephyr,memory-region", "mmio-sram";
+				reg = < 0x40140000 0x4000 >;
+				zephyr,memory-region = "SRAM1";
+				zephyr,memory-attr = < 0x100000 >;
+				status = "okay";
+			};
+		};
+		peripheral: peripheral@50000000 {
+			ranges = < 0x0 0x50000000 0x10000000 >;
+			#address-cells = < 0x1 >;
+			#size-cells = < 0x1 >;
+			clkctl0: clkctl@1000 {
+				compatible = "nxp,lpc-syscon";
+				reg = < 0x1000 0x1000 >;
+				#clock-cells = < 0x1 >;
+			};
+			iocon: iocon@4000 {
+				compatible = "nxp,lpc-iocon";
+				reg = < 0x4000 0x1000 >;
+				pinctrl: pinctrl {
+					compatible = "nxp,rt-iocon-pinctrl";
+					pinmux_flexcomm0_usart: pinmux_flexcomm0_usart {
+						phandle = < 0x3 >;
+						group0 {
+							pinmux = < 0x200001 >;
+							input-enable;
+							slew-rate = "normal";
+							drive-strength = "normal";
+						};
+						group1 {
+							pinmux = < 0x100001 >;
+							slew-rate = "normal";
+							drive-strength = "normal";
+						};
+					};
+					pinmux_flexcomm1_i2s: pinmux_flexcomm1_i2s {
+						phandle = < 0x5 >;
+						group0 {
+							pinmux = < 0x900001 >, < 0x800001 >, < 0x700001 >;
+							slew-rate = "normal";
+							input-enable;
+							drive-strength = "high";
+						};
+					};
+					pinmux_flexcomm3_i2s: pinmux_flexcomm3_i2s {
+						phandle = < 0x6 >;
+						group0 {
+							pinmux = < 0x1700001 >;
+							input-enable;
+							slew-rate = "normal";
+							drive-strength = "high";
+						};
+					};
+					pinmux_flexcomm4_i2c: pinmux_flexcomm4_i2c {
+						phandle = < 0x7 >;
+						group0 {
+							pinmux = < 0x1d00001 >, < 0x1e00001 >;
+							input-enable;
+							slew-rate = "normal";
+							drive-strength = "high";
+							drive-open-drain;
+						};
+					};
+					pinmux_flexcomm12_usart: pinmux_flexcomm12_usart {
+						phandle = < 0xb >;
+						group0 {
+							pinmux = < 0x9f00006 >;
+							input-enable;
+							slew-rate = "normal";
+							drive-strength = "normal";
+						};
+						group1 {
+							pinmux = < 0x9e00006 >;
+							slew-rate = "normal";
+							drive-strength = "normal";
+						};
+					};
+					pinmux_flexcomm16_spi: pinmux_flexcomm16_spi {
+						phandle = < 0xc >;
+						group0 {
+							pinmux = < 0x2300006 >, < 0x2400006 >, < 0x2500006 >, < 0x2600006 >;
+							input-enable;
+							slew-rate = "normal";
+							drive-strength = "normal";
+						};
+					};
+					pinmux_pmic_i2c: pinmux_pmic_i2c {
+						phandle = < 0xa >;
+						group0 {
+							pinmux = < 0x10000000 >, < 0x10100000 >;
+							bias-pull-up;
+							input-enable;
+							slew-rate = "normal";
+							drive-strength = "normal";
+							drive-open-drain;
+						};
+					};
+					pinmux_flexspi2: pinmux_flexspi2 {
+						phandle = < 0x15 >;
+						group0 {
+							pinmux = < 0x8b00002 >, < 0x8c00002 >, < 0x8d00002 >, < 0x8e00002 >, < 0x8f00002 >, < 0xaf00002 >, < 0xb000002 >, < 0xb100002 >, < 0xb200002 >, < 0x9200002 >;
+							slew-rate = "normal";
+							input-enable;
+							drive-strength = "high";
+						};
+						group1 {
+							pinmux = < 0x9000002 >;
+							slew-rate = "normal";
+							input-enable;
+							drive-strength = "high";
+							bias-pull-down;
+						};
+					};
+					pinmux_flexspi: pinmux_flexspi {
+						phandle = < 0x13 >;
+						group0 {
+							pinmux = < 0x3200001 >, < 0x3300001 >, < 0x3400001 >, < 0x3500001 >, < 0x3600001 >, < 0x3700001 >, < 0x3800001 >, < 0x3900001 >, < 0x3a00001 >, < 0x3b00001 >;
+							input-enable;
+							slew-rate = "normal";
+							drive-strength = "high";
+						};
+					};
+					pinmux_flexspi_sleep: pinmux_flexspi_sleep {
+						phandle = < 0x14 >;
+						group0 {
+							pinmux = < 0x3200001 >, < 0x3300001 >;
+							slew-rate = "normal";
+							drive-strength = "high";
+						};
+						group1 {
+							pinmux = < 0x3400001 >, < 0x3500001 >, < 0x3600001 >, < 0x3700001 >, < 0x3800001 >, < 0x3900001 >, < 0x3a00001 >, < 0x3b00001 >;
+							input-enable;
+							slew-rate = "normal";
+							drive-strength = "high";
+							bias-pull-up;
+						};
+					};
+					pinmux_lpadc0: pinmux_lpadc0 {
+						phandle = < 0x10 >;
+						group0 {
+							pinmux = < 0x500000 >, < 0x600000 >, < 0x1300000 >;
+							slew-rate = "normal";
+							drive-strength = "normal";
+							nxp,analog-mode;
+						};
+					};
+					pinmux_usdhc: pinmux_usdhc {
+						phandle = < 0xf >;
+						group0 {
+							pinmux = < 0x3f00001 >, < 0x4000001 >, < 0x4100001 >, < 0x4200001 >, < 0x4300001 >, < 0x4500001 >, < 0x4600001 >, < 0x4700001 >, < 0x4800001 >, < 0x4900001 >;
+							bias-pull-up;
+							input-enable;
+							slew-rate = "normal";
+							drive-strength = "normal";
+						};
+						group1 {
+							pinmux = < 0x3e00001 >;
+							bias-pull-down;
+							input-enable;
+							slew-rate = "normal";
+							drive-strength = "normal";
+						};
+						group2 {
+							pinmux = < 0x4a00000 >;
+							bias-pull-down;
+							slew-rate = "normal";
+							drive-strength = "normal";
+						};
+						group3 {
+							pinmux = < 0x4400005 >;
+							bias-pull-down;
+							input-enable;
+							slew-rate = "slow";
+							drive-strength = "normal";
+						};
+					};
+					pinmux_sctimer_default: pinmux_sctimer_default {
+						phandle = < 0xd >;
+						group0 {
+							pinmux = < 0x500003 >, < 0x600003 >;
+							slew-rate = "normal";
+							drive-strength = "normal";
+						};
+					};
+					pinmux_i3c: pinmux_i3c {
+						phandle = < 0x12 >;
+						group0 {
+							pinmux = < 0x5d00001 >, < 0x5e00001 >;
+							input-enable;
+							slew-rate = "slow";
+							drive-strength = "high";
+						};
+						group1 {
+							pinmux = < 0x5f00001 >;
+							slew-rate = "normal";
+							drive-strength = "normal";
+						};
+					};
+				};
+			};
+			clkctl1: clkctl@21000 {
+				compatible = "nxp,lpc-syscon";
+				reg = < 0x21000 0x1000 >;
+				#clock-cells = < 0x1 >;
+				phandle = < 0x2 >;
+			};
+			uuid: uuid@2f50 {
+				compatible = "nxp,lpc-uid";
+				reg = < 0x2f50 0x10 >;
+			};
+			gpio0: gpio@0 {
+				compatible = "nxp,lpc-gpio";
+				reg = < 0x100000 0x1000 >;
+				int-source = "pint";
+				gpio-controller;
+				#gpio-cells = < 0x2 >;
+				port = < 0x0 >;
+				status = "okay";
+				phandle = < 0x8 >;
+			};
+			gpio1: gpio@1 {
+				compatible = "nxp,lpc-gpio";
+				reg = < 0x100000 0x1000 >;
+				int-source = "pint";
+				gpio-controller;
+				#gpio-cells = < 0x2 >;
+				port = < 0x1 >;
+				status = "okay";
+				phandle = < 0x9 >;
+			};
+			gpio2: gpio@2 {
+				compatible = "nxp,lpc-gpio";
+				reg = < 0x100000 0x1000 >;
+				gpio-controller;
+				#gpio-cells = < 0x2 >;
+				port = < 0x2 >;
+				status = "okay";
+				phandle = < 0xe >;
+			};
+			gpio3: gpio@3 {
+				compatible = "nxp,lpc-gpio";
+				reg = < 0x100000 0x1000 >;
+				gpio-controller;
+				#gpio-cells = < 0x2 >;
+				port = < 0x3 >;
+				status = "okay";
+				int-source = "int-a";
+				interrupts = < 0x2 0x0 >;
+				phandle = < 0x18 >;
+			};
+			gpio4: gpio@4 {
+				compatible = "nxp,lpc-gpio";
+				reg = < 0x100000 0x1000 >;
+				gpio-controller;
+				#gpio-cells = < 0x2 >;
+				port = < 0x4 >;
+				status = "okay";
+				int-source = "int-b";
+				interrupts = < 0x3 0x0 >;
+				phandle = < 0x19 >;
+			};
+			gpio5: gpio@5 {
+				compatible = "nxp,lpc-gpio";
+				reg = < 0x100000 0x1000 >;
+				gpio-controller;
+				#gpio-cells = < 0x2 >;
+				port = < 0x5 >;
+				status = "okay";
+				phandle = < 0x1a >;
+			};
+			gpio6: gpio@6 {
+				compatible = "nxp,lpc-gpio";
+				reg = < 0x100000 0x1000 >;
+				gpio-controller;
+				#gpio-cells = < 0x2 >;
+				port = < 0x6 >;
+				status = "okay";
+			};
+			pint: pint@25000 {
+				compatible = "nxp,pint";
+				reg = < 0x25000 0x1000 >;
+				interrupt-controller;
+				#interrupt-cells = < 0x1 >;
+				#address-cells = < 0x0 >;
+				interrupts = < 0x4 0x2 >, < 0x5 0x2 >, < 0x6 0x2 >, < 0x7 0x2 >, < 0x23 0x2 >, < 0x24 0x2 >, < 0x25 0x2 >, < 0x26 0x2 >;
+				num-lines = < 0x8 >;
+				num-inputs = < 0x40 >;
+			};
+			flexcomm0: flexcomm@106000 {
+				compatible = "nxp,lpc-usart";
+				reg = < 0x106000 0x1000 >;
+				interrupts = < 0xe 0x0 >;
+				clocks = < &clkctl1 0x0 >;
+				status = "okay";
+				current-speed = < 0x1c200 >;
+				pinctrl-0 = < &pinmux_flexcomm0_usart >;
+				pinctrl-names = "default";
+				dmas = < &dma0 0x0 >, < &dma0 0x1 >;
+				dma-names = "rx", "tx";
+			};
+			flexcomm1: i2s0: flexcomm@107000 {
+				compatible = "nxp,lpc-i2s";
+				reg = < 0x107000 0x1000 >;
+				interrupts = < 0xf 0x0 >;
+				clocks = < &clkctl1 0x1 >;
+				status = "disabled";
+				pinctrl-0 = < &pinmux_flexcomm1_i2s >;
+				pinctrl-names = "default";
+				#address-cells = < 0x1 >;
+				#size-cells = < 0x0 >;
+				dmas = < &dma0 0x2 >;
+				dma-names = "rx";
+			};
+			flexcomm2: flexcomm@108000 {
+				compatible = "nxp,lpc-flexcomm";
+				reg = < 0x108000 0x1000 >;
+				interrupts = < 0x10 0x0 >;
+				clocks = < &clkctl1 0x2 >;
+				status = "disabled";
+			};
+			flexcomm3: i2s1: flexcomm@109000 {
+				compatible = "nxp,lpc-i2s";
+				reg = < 0x109000 0x1000 >;
+				interrupts = < 0x11 0x0 >;
+				clocks = < &clkctl1 0x3 >;
+				status = "disabled";
+				pinctrl-0 = < &pinmux_flexcomm3_i2s >;
+				pinctrl-names = "default";
+				#address-cells = < 0x1 >;
+				#size-cells = < 0x0 >;
+				dmas = < &dma0 0x7 >;
+				dma-names = "tx";
+			};
+			flexcomm4: arduino_i2c: nxp_mipi_i2c: flexcomm@122000 {
+				compatible = "nxp,lpc-i2c";
+				reg = < 0x122000 0x1000 >;
+				interrupts = < 0x12 0x0 >;
+				clocks = < &clkctl1 0x4 >;
+				status = "okay";
+				clock-frequency = < 0x61a80 >;
+				#address-cells = < 0x1 >;
+				#size-cells = < 0x0 >;
+				pinctrl-0 = < &pinmux_flexcomm4_i2c >;
+				pinctrl-names = "default";
+				fxos8700: fxos8700@1e {
+					compatible = "nxp,fxos8700";
+					reg = < 0x1e >;
+					int1-gpios = < &gpio0 0x16 0x1 >;
+					reset-gpios = < &gpio1 0x7 0x0 >;
+				};
+			};
+			flexcomm5: flexcomm@123000 {
+				compatible = "nxp,lpc-flexcomm";
+				reg = < 0x123000 0x1000 >;
+				interrupts = < 0x13 0x0 >;
+				clocks = < &clkctl1 0x5 >;
+				status = "disabled";
+			};
+			flexcomm6: flexcomm@124000 {
+				compatible = "nxp,lpc-flexcomm";
+				reg = < 0x124000 0x1000 >;
+				interrupts = < 0x2b 0x0 >;
+				clocks = < &clkctl1 0x6 >;
+				status = "disabled";
+			};
+			flexcomm7: flexcomm@125000 {
+				compatible = "nxp,lpc-flexcomm";
+				reg = < 0x125000 0x1000 >;
+				interrupts = < 0x2c 0x0 >;
+				clocks = < &clkctl1 0x7 >;
+				status = "disabled";
+			};
+			pmic_i2c: i2c@127000 {
+				compatible = "nxp,lpc-i2c";
+				reg = < 0x127000 0x1000 >;
+				interrupts = < 0x15 0x0 >;
+				clocks = < &clkctl1 0xf >;
+				status = "okay";
+				clock-frequency = < 0x61a80 >;
+				#address-cells = < 0x1 >;
+				#size-cells = < 0x0 >;
+				pinctrl-0 = < &pinmux_pmic_i2c >;
+				pinctrl-names = "default";
+				pca9420: pca9420@61 {
+					compatible = "nxp,pca9420";
+					reg = < 0x61 >;
+					nxp,enable-modesel-pins;
+					pca9420_sw1: BUCK1 {
+						regulator-boot-on;
+						nxp,mode0-microvolt = < 0x10c8e0 >;
+						nxp,mode1-microvolt = < 0x927c0 >;
+						nxp,mode2-microvolt = < 0x0 >;
+					};
+					pca9420_sw2: BUCK2 {
+						regulator-boot-on;
+						nxp,mode0-microvolt = < 0x1b7740 >;
+						nxp,mode1-microvolt = < 0x1b7740 >;
+						nxp,mode2-microvolt = < 0x1b7740 >;
+					};
+					pca9420_ldo1: LDO1 {
+						regulator-boot-on;
+						nxp,mode0-microvolt = < 0x1b7740 >;
+						nxp,mode1-microvolt = < 0x1b7740 >;
+						nxp,mode2-microvolt = < 0x1b7740 >;
+					};
+					pca9420_ldo2: LDO2 {
+						regulator-boot-on;
+						nxp,mode0-microvolt = < 0x325aa0 >;
+						nxp,mode1-microvolt = < 0x325aa0 >;
+						nxp,mode2-microvolt = < 0x325aa0 >;
+					};
+				};
+			};
+			flexcomm8: flexcomm@209000 {
+				compatible = "nxp,lpc-flexcomm";
+				reg = < 0x209000 0x1000 >;
+				interrupts = < 0x3c 0x0 >;
+				clocks = < &clkctl1 0x8 >;
+				status = "disabled";
+			};
+			flexcomm9: flexcomm@20a000 {
+				compatible = "nxp,lpc-flexcomm";
+				reg = < 0x20a000 0x1000 >;
+				interrupts = < 0x3d 0x0 >;
+				clocks = < &clkctl1 0x9 >;
+				status = "disabled";
+			};
+			flexcomm10: flexcomm@20b000 {
+				compatible = "nxp,lpc-flexcomm";
+				reg = < 0x20b000 0x1000 >;
+				interrupts = < 0x3e 0x0 >;
+				clocks = < &clkctl1 0xa >;
+				status = "disabled";
+			};
+			flexcomm11: flexcomm@20c000 {
+				compatible = "nxp,lpc-flexcomm";
+				reg = < 0x20c000 0x1000 >;
+				interrupts = < 0x3f 0x0 >;
+				clocks = < &clkctl1 0xb >;
+				status = "disabled";
+			};
+			flexcomm12: arduino_serial: flexcomm@20d000 {
+				compatible = "nxp,lpc-usart";
+				reg = < 0x20d000 0x1000 >;
+				interrupts = < 0x40 0x0 >;
+				clocks = < &clkctl1 0xc >;
+				status = "okay";
+				current-speed = < 0x1c200 >;
+				pinctrl-0 = < &pinmux_flexcomm12_usart >;
+				pinctrl-names = "default";
+				dmas = < &dma0 0x22 >, < &dma0 0x23 >;
+				dma-names = "rx", "tx";
+			};
+			flexcomm13: flexcomm@20e000 {
+				compatible = "nxp,lpc-flexcomm";
+				reg = < 0x20e000 0x1000 >;
+				interrupts = < 0x41 0x0 >;
+				clocks = < &clkctl1 0xd >;
+				status = "disabled";
+			};
+			lcdif: zephyr_lcdif: lcdif@210000 {
+				compatible = "nxp,dcnano-lcdif";
+				reg = < 0x210000 0x1000 >;
+				interrupts = < 0x45 0x0 >;
+				status = "disabled";
+			};
+			usbhs: zephyr_udc0: usbhs@144000 {
+				compatible = "nxp,lpcip3511";
+				reg = < 0x144000 0x1000 >;
+				interrupts = < 0x32 0x1 >;
+				num-bidir-endpoints = < 0x6 >;
+				status = "okay";
+			};
+			hs_lspi: spi@126000 {
+				compatible = "nxp,lpc-spi";
+				reg = < 0x126000 0x1000 >;
+				interrupts = < 0x14 0x0 >;
+				clocks = < &clkctl1 0xe >;
+				status = "disabled";
+				#address-cells = < 0x1 >;
+				#size-cells = < 0x0 >;
+			};
+			hs_lspi1: hs_spi1: spi@128000 {
+				compatible = "nxp,lpc-spi";
+				reg = < 0x128000 0x1000 >;
+				interrupts = < 0x42 0x0 >;
+				clocks = < &clkctl1 0x10 >;
+				status = "okay";
+				#address-cells = < 0x1 >;
+				#size-cells = < 0x0 >;
+				pinctrl-0 = < &pinmux_flexcomm16_spi >;
+				pinctrl-names = "default";
+				dmas = < &dma0 0x1c >, < &dma0 0x1d >;
+				dma-names = "rx", "tx";
+			};
+			dma0: dma-controller@104000 {
+				compatible = "nxp,lpc-dma";
+				reg = < 0x104000 0x1000 >;
+				interrupts = < 0x1 0x0 >;
+				dma-channels = < 0x25 >;
+				nxp,dma-num-of-otrigs = < 0x4 >;
+				nxp,dma-otrig-base-address = < 0x30000000 >;
+				nxp,dma-itrig-base-address = < 0x2000000e >;
+				status = "okay";
+				#dma-cells = < 0x1 >;
+				phandle = < 0x4 >;
+			};
+			dma1: dma-controller@105000 {
+				compatible = "nxp,lpc-dma";
+				reg = < 0x105000 0x1000 >;
+				interrupts = < 0x36 0x0 >;
+				dma-channels = < 0x25 >;
+				nxp,dma-num-of-otrigs = < 0x4 >;
+				nxp,dma-otrig-base-address = < 0x50000000 >;
+				nxp,dma-itrig-base-address = < 0x4000000e >;
+				status = "disabled";
+				#dma-cells = < 0x1 >;
+			};
+			os_timer: timers@113000 {
+				compatible = "nxp,os-timer";
+				reg = < 0x113000 0x1000 >;
+				interrupts = < 0x29 0x0 >;
+				status = "okay";
+				wakeup-source;
+			};
+			rtc: rtc@30000 {
+				compatible = "nxp,lpc-rtc";
+				reg = < 0x30000 0x1000 >;
+				interrupts = < 0x20 0x0 >;
+				status = "okay";
+			};
+			trng: random@138000 {
+				compatible = "nxp,kinetis-trng";
+				reg = < 0x138000 0x1000 >;
+				status = "okay";
+				interrupts = < 0x1f 0x0 >;
+			};
+			sc_timer: pwm@146000 {
+				compatible = "nxp,sctimer-pwm";
+				reg = < 0x146000 0x1000 >;
+				interrupts = < 0xc 0x0 >;
+				status = "okay";
+				prescaler = < 0x8 >;
+				#pwm-cells = < 0x3 >;
+				clocks = < &clkctl1 0x22 >;
+				pinctrl-0 = < &pinmux_sctimer_default >;
+				pinctrl-names = "default";
+			};
+			wwdt0: watchdog@e000 {
+				compatible = "nxp,lpc-wwdt";
+				reg = < 0xe000 0x1000 >;
+				interrupts = < 0x0 0x0 >;
+				status = "okay";
+				clk-divider = < 0x1 >;
+			};
+			wwdt1: watchdog@2e000 {
+				compatible = "nxp,lpc-wwdt";
+				reg = < 0x2e000 0x1000 >;
+				interrupts = < 0x34 0x0 >;
+				status = "disabled";
+				clk-divider = < 0x1 >;
+			};
+			usdhc0: usdhc@136000 {
+				compatible = "nxp,imx-usdhc";
+				reg = < 0x136000 0x1000 >;
+				status = "okay";
+				interrupts = < 0x2d 0x0 >;
+				clocks = < &clkctl1 0x14 >;
+				max-current-330 = < 0x3fc >;
+				max-current-180 = < 0x3fc >;
+				max-bus-freq = < 0xc65d400 >;
+				min-bus-freq = < 0x61a80 >;
+				pwr-gpios = < &gpio2 0xa 0x0 >;
+				cd-gpios = < &gpio2 0x9 0x1 >;
+				pinctrl-0 = < &pinmux_usdhc >;
+				pinctrl-names = "default";
+				mmc-hs200-1_8v;
+				mmc-hs400-1_8v;
+				mmc {
+					compatible = "zephyr,mmc-disk";
+					status = "okay";
+				};
+			};
+			usdhc1: usdhc@137000 {
+				compatible = "nxp,imx-usdhc";
+				reg = < 0x137000 0x1000 >;
+				status = "disabled";
+				interrupts = < 0x2e 0x0 >;
+				clocks = < &clkctl1 0x15 >;
+				max-current-330 = < 0x3fc >;
+				max-current-180 = < 0x3fc >;
+				max-bus-freq = < 0xc65d400 >;
+				min-bus-freq = < 0x61a80 >;
+			};
+			lpadc0: lpadc@13A0000 {
+				compatible = "nxp,lpc-lpadc";
+				reg = < 0x13a000 0x304 >;
+				interrupts = < 0x16 0x0 >;
+				status = "okay";
+				clk-divider = < 0x1 >;
+				clk-source = < 0x0 >;
+				voltage-ref = < 0x1 >;
+				calibration-average = < 0x80 >;
+				power-level = < 0x0 >;
+				offset-value-a = < 0xa >;
+				offset-value-b = < 0xa >;
+				#io-channel-cells = < 0x1 >;
+				pinctrl-0 = < &pinmux_lpadc0 >;
+				pinctrl-names = "default";
+			};
+			smartdma: dma@27020 {
+				compatible = "nxp,smartdma";
+				reg = < 0x27020 0x1000 >;
+				program-mem = < 0x24100000 >;
+				interrupts = < 0x49 0x0 >;
+				status = "okay";
+				#dma-cells = < 0x0 >;
+				phandle = < 0x11 >;
+			};
+			ctimer0: ctimer@28000 {
+				compatible = "nxp,lpc-ctimer";
+				reg = < 0x28000 0x1000 >;
+				interrupts = < 0xa 0x0 >;
+				status = "okay";
+				clk-source = < 0x1 >;
+				clocks = < &clkctl1 0x0 >;
+				mode = < 0x0 >;
+				input = < 0x0 >;
+				prescale = < 0x0 >;
+			};
+			ctimer1: ctimer@29000 {
+				compatible = "nxp,lpc-ctimer";
+				reg = < 0x29000 0x1000 >;
+				interrupts = < 0xb 0x0 >;
+				status = "okay";
+				clk-source = < 0x1 >;
+				clocks = < &clkctl1 0x1 >;
+				mode = < 0x0 >;
+				input = < 0x0 >;
+				prescale = < 0x0 >;
+			};
+			ctimer2: ctimer@2a000 {
+				compatible = "nxp,lpc-ctimer";
+				reg = < 0x2a000 0x1000 >;
+				interrupts = < 0x27 0x0 >;
+				status = "okay";
+				clk-source = < 0x1 >;
+				clocks = < &clkctl1 0x2 >;
+				mode = < 0x0 >;
+				input = < 0x0 >;
+				prescale = < 0x0 >;
+			};
+			ctimer3: ctimer@2b000 {
+				compatible = "nxp,lpc-ctimer";
+				reg = < 0x2b000 0x1000 >;
+				interrupts = < 0xd 0x0 >;
+				status = "okay";
+				clk-source = < 0x1 >;
+				clocks = < &clkctl1 0x3 >;
+				mode = < 0x0 >;
+				input = < 0x0 >;
+				prescale = < 0x0 >;
+			};
+			ctimer4: ctimer@2c000 {
+				compatible = "nxp,lpc-ctimer";
+				reg = < 0x2c000 0x1000 >;
+				interrupts = < 0x28 0x0 >;
+				status = "okay";
+				clk-source = < 0x1 >;
+				clocks = < &clkctl1 0x4 >;
+				mode = < 0x0 >;
+				input = < 0x0 >;
+				prescale = < 0x0 >;
+			};
+			mipi_dsi: zephyr_mipi_dsi: mipi_dsi@31000 {
+				compatible = "nxp,mipi-dsi-2l";
+				#address-cells = < 0x1 >;
+				#size-cells = < 0x0 >;
+				reg = < 0x31000 0x1000 >;
+				interrupts = < 0x47 0x0 >;
+				clocks = < &clkctl1 0x1f >, < &clkctl1 0x20 >, < &clkctl1 0x21 >;
+				clock-names = "dphy", "esc", "pixel";
+				status = "disabled";
+				dmas = < &smartdma >;
+				dma-names = "smartdma";
+			};
+			i3c0: i3c@36000 {
+				compatible = "nxp,mcux-i3c";
+				reg = < 0x36000 0x1000 >;
+				interrupts = < 0x31 0x0 >;
+				clocks = < &clkctl1 0x1e >;
+				clk-divider = < 0x2 >;
+				clk-divider-slow = < 0x1 >;
+				clk-divider-tc = < 0x1 >;
+				status = "okay";
+				#address-cells = < 0x3 >;
+				#size-cells = < 0x0 >;
+				pinctrl-0 = < &pinmux_i3c >;
+				pinctrl-names = "default";
+			};
+			mbox: mbox@110000 {
+				compatible = "nxp,mbox-imx-mu";
+				reg = < 0x110000 0x100 >;
+				interrupts = < 0x22 0x0 >;
+				rx-channels = < 0x4 >;
+				#mbox-cells = < 0x1 >;
+				status = "okay";
+			};
+			mrt: mrt@2d000 {
+				compatible = "nxp,mrt";
+				reg = < 0x2d000 0x100 >;
+				interrupts = < 0x9 0x0 >;
+				num-channels = < 0x4 >;
+				num-bits = < 0x18 >;
+				clocks = < &clkctl1 0x28 >;
+				#address-cells = < 0x1 >;
+				#size-cells = < 0x0 >;
+				mrt_channel0: mrt_channel@0 {
+					compatible = "nxp,mrt-channel";
+					reg = < 0x0 >;
+					status = "okay";
+				};
+				mrt_channel1: mrt_channel@1 {
+					compatible = "nxp,mrt-channel";
+					reg = < 0x1 >;
+					status = "disabled";
+				};
+				mrt_channel2: mrt_channel@2 {
+					compatible = "nxp,mrt-channel";
+					reg = < 0x2 >;
+					status = "disabled";
+				};
+				mrt_channel3: mrt_channel@3 {
+					compatible = "nxp,mrt-channel";
+					reg = < 0x3 >;
+					status = "disabled";
+				};
+			};
+		};
+		flexspi: spi@134000 {
+			reg = < 0x50134000 0x1000 >, < 0x18000000 0x8000000 >;
+			compatible = "nxp,imx-flexspi";
+			status = "okay";
+			interrupts = < 0x2a 0x0 >;
+			#address-cells = < 0x1 >;
+			#size-cells = < 0x0 >;
+			pinctrl-0 = < &pinmux_flexspi >;
+			pinctrl-1 = < &pinmux_flexspi_sleep >;
+			pinctrl-names = "default", "sleep";
+			mx25um51345g: mx25um51345g@0 {
+				compatible = "nxp,imx-flexspi-mx25um51345g";
+				size = < 0x20000000 >;
+				reg = < 0x0 >;
+				spi-max-frequency = < 0xbebc200 >;
+				status = "okay";
+				jedec-id = [ C2 81 3A ];
+				erase-block-size = < 0x1000 >;
+				write-block-size = < 0x10 >;
+				partitions {
+					compatible = "fixed-partitions";
+					#address-cells = < 0x1 >;
+					#size-cells = < 0x1 >;
+					boot_partition: partition@0 {
+						label = "mcuboot";
+						reg = < 0x0 0x20000 >;
+					};
+					slot0_partition: partition@20000 {
+						label = "image-0";
+						reg = < 0x20000 0x301000 >;
+					};
+					slot1_partition: partition@321000 {
+						label = "image-1";
+						reg = < 0x321000 0x300000 >;
+					};
+					storage_partition: partition@621000 {
+						label = "storage";
+						reg = < 0x621000 0x3900000 >;
+					};
+				};
+			};
+		};
+		flexspi2: spi@13C000 {
+			reg = < 0x5013c000 0x1000 >, < 0x38000000 0x8000000 >;
+			compatible = "nxp,imx-flexspi";
+			status = "okay";
+			interrupts = < 0x2a 0x0 >;
+			#address-cells = < 0x1 >;
+			#size-cells = < 0x0 >;
+			pinctrl-0 = < &pinmux_flexspi2 >;
+			pinctrl-names = "default";
+			rx-clock-source = < 0x3 >;
+			ahb-prefetch;
+			ahb-bufferable;
+			ahb-cacheable;
+			ahb-read-addr-opt;
+			aps6408l: aps6408l@0 {
+				compatible = "nxp,imx-flexspi-aps6408l";
+				size = < 0x4000000 >;
+				reg = < 0x0 >;
+				spi-max-frequency = < 0xbcd3d80 >;
+				status = "okay";
+				cs-interval-unit = < 0x1 >;
+				cs-interval = < 0x5 >;
+				cs-hold-time = < 0x3 >;
+				cs-setup-time = < 0x3 >;
+				data-valid-time = < 0x1 >;
+				column-space = < 0x0 >;
+				ahb-write-wait-unit = < 0x2 >;
+				ahb-write-wait-interval = < 0x0 >;
+			};
+		};
+		nvic: interrupt-controller@e000e100 {
+			#address-cells = < 0x1 >;
+			compatible = "arm,v8m-nvic";
+			reg = < 0xe000e100 0xc00 >;
+			interrupt-controller;
+			#interrupt-cells = < 0x2 >;
+			arm,num-irq-priority-bits = < 0x3 >;
+			phandle = < 0x1 >;
+		};
+		systick: timer@e000e010 {
+			compatible = "arm,armv8m-systick";
+			reg = < 0xe000e010 0x10 >;
+			status = "disabled";
+		};
+	};
+	chosen {
+		zephyr,entropy = &trng;
+		zephyr,flash-controller = &mx25um51345g;
+		zephyr,flash = &mx25um51345g;
+		zephyr,code-partition = &slot0_partition;
+		zephyr,sram = &sram0;
+		zephyr,console = &flexcomm0;
+		zephyr,shell-uart = &flexcomm0;
+		zephyr,display = &lcdif;
+	};
+	aliases {
+		sw0 = &user_button_1;
+		sw1 = &user_button_2;
+		led0 = &green_led;
+		led1 = &blue_led;
+		led2 = &red_led;
+		usart-0 = &flexcomm0;
+		watchdog0 = &wwdt0;
+		magn0 = &fxos8700;
+		accel0 = &fxos8700;
+		sdhc0 = &usdhc0;
+		pwm-0 = &sc_timer;
+	};
+	cpus {
+		#address-cells = < 0x1 >;
+		#size-cells = < 0x0 >;
+		cpu0: cpu@0 {
+			compatible = "arm,cortex-m33f";
+			reg = < 0x0 >;
+			#address-cells = < 0x1 >;
+			#size-cells = < 0x1 >;
+			cpu-power-states = < &idle &suspend >;
+			mpu: mpu@e000ed90 {
+				compatible = "arm,armv8m-mpu";
+				reg = < 0xe000ed90 0x40 >;
+			};
+		};
+		power-states {
+			idle: idle {
+				compatible = "zephyr,power-state";
+				power-state-name = "runtime-idle";
+				min-residency-us = < 0x0 >;
+				exit-latency-us = < 0x0 >;
+				phandle = < 0x16 >;
+			};
+			suspend: suspend {
+				compatible = "nxp,pdcfg-power", "zephyr,power-state";
+				power-state-name = "suspend-to-idle";
+				min-residency-us = < 0x1f4 >;
+				exit-latency-us = < 0x78 >;
+				deep-sleep-config = < 0xc800 >, < 0x80000004 >, < 0xffffffff >, < 0x0 >;
+				phandle = < 0x17 >;
+			};
+		};
+	};
+	gpio_keys {
+		compatible = "gpio-keys";
+		user_button_1: button_0 {
+			label = "User SW1";
+			gpios = < &gpio0 0x19 0x1 >;
+			zephyr,code = < 0xb >;
+			status = "okay";
+		};
+		user_button_2: button_1 {
+			label = "User SW2";
+			gpios = < &gpio0 0xa 0x1 >;
+			zephyr,code = < 0x2 >;
+			status = "okay";
+		};
+	};
+	leds {
+		compatible = "gpio-leds";
+		green_led: led_1 {
+			gpios = < &gpio1 0x0 0x0 >;
+			label = "User LED_GREEN";
+			status = "okay";
+		};
+		blue_led: led_2 {
+			gpios = < &gpio3 0x11 0x0 >;
+			label = "User LED_BLUE";
+			status = "okay";
+		};
+		red_led: led_3 {
+			gpios = < &gpio0 0xe 0x0 >;
+			label = "User LED_RED";
+			status = "okay";
+		};
+	};
+	arduino_header: arduino-connector {
+		compatible = "arduino-header-r3";
+		#gpio-cells = < 0x2 >;
+		gpio-map-mask = < 0xffffffff 0xffffffc0 >;
+		gpio-map-pass-thru = < 0x0 0x3f >;
+		gpio-map = < 0x0 0x0 &gpio0 0x5 0x0 >, < 0x1 0x0 &gpio0 0x6 0x0 >, < 0x2 0x0 &gpio0 0x13 0x0 >, < 0x3 0x0 &gpio0 0xd 0x0 >, < 0x4 0x0 &gpio4 0x16 0x0 >, < 0x5 0x0 &gpio4 0x15 0x0 >, < 0x6 0x0 &gpio4 0x1f 0x0 >, < 0x7 0x0 &gpio4 0x1e 0x0 >, < 0x8 0x0 &gpio4 0x14 0x0 >, < 0x9 0x0 &gpio4 0x17 0x0 >, < 0xa 0x0 &gpio4 0x18 0x0 >, < 0xb 0x0 &gpio4 0x19 0x0 >, < 0xc 0x0 &gpio4 0x1a 0x0 >, < 0xd 0x0 &gpio4 0x1b 0x0 >, < 0xe 0x0 &gpio4 0x1c 0x0 >, < 0xf 0x0 &gpio4 0x1d 0x0 >, < 0x10 0x0 &gpio5 0x0 0x0 >, < 0x11 0x0 &gpio5 0x1 0x0 >, < 0x12 0x0 &gpio5 0x2 0x0 >, < 0x13 0x0 &gpio5 0x3 0x0 >, < 0x14 0x0 &gpio4 0x16 0x0 >, < 0x15 0x0 &gpio4 0x15 0x0 >;
+	};
+	nxp_mipi_connector: mipi-connector {
+		compatible = "gpio-nexus";
+		#gpio-cells = < 0x2 >;
+		gpio-map-mask = < 0xffffffff 0xffffffc0 >;
+		gpio-map-pass-thru = < 0x0 0x3f >;
+		gpio-map = < 0x0 0x0 &gpio0 0xc 0x0 >, < 0x15 0x0 &gpio3 0x15 0x0 >, < 0x16 0x0 &gpio3 0x12 0x0 >, < 0x1a 0x0 &gpio0 0x1e 0x0 >, < 0x1b 0x0 &gpio0 0x1d 0x0 >, < 0x1c 0x0 &gpio4 0x4 0x0 >, < 0x1d 0x0 &gpio3 0x13 0x0 >, < 0x20 0x0 &gpio3 0xf 0x0 >, < 0x22 0x0 &gpio0 0xc 0x0 >;
+	};
+	en_mipi_display: enable-mipi-display {
+		compatible = "regulator-fixed";
+		regulator-name = "en_mipi_display";
+		enable-gpios = < &gpio3 0xf 0x0 >;
+		regulator-boot-on;
+	};
+};

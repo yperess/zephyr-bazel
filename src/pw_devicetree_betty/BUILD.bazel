@@ -1,0 +1,12 @@
+load(
+    "@pigweed//pw_build:pigweed.bzl",
+    "pw_cc_test",
+)
+
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "config_overrides",
+    hdrs = [ "public_overrides/devicetree_generated.h" ],
+    includes = [ "public_overrides" ],
+)
