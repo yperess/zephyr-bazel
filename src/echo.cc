@@ -15,9 +15,21 @@
 #include <cstddef>
 
 #include "pw_sys_io/sys_io.h"
+#include "zephyr/devicetree.h"
+#include "pw_log/log.h"
 
+void LogDevicetreeInfo(void) {
+  // Basic example on how we can get devicetree info with Zephyr's API
+  // Devicetree data is in //src/pw_devicetree_betty
+  PW_LOG_INFO("Devicetree info:");
+  const char * str = DT_PROP(DT_ROOT, compatible);
+  PW_LOG_INFO(" compatible: %s", str);
+  str = DT_PROP(DT_NODELABEL(cpu0), compatible);
+  PW_LOG_INFO(" cpu0: %s", str);
+}
 
 int main() {
+  LogDevicetreeInfo();
   while (true) {
     std::byte data;
     pw::sys_io::ReadByte(&data).IgnoreError();
