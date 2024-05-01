@@ -84,9 +84,8 @@ local_repository(
 )
 
 # Zephyr
-new_local_repository(
+local_repository(
     name = "zephyr",
-    build_file = "//src/pw_devicetree:zephyr.BUILD",
     path = "third_party/zephyr",
 )
 
@@ -132,3 +131,14 @@ pip_parse(
 load("@pypi//:requirements.bzl", "install_deps")
 
 install_deps()
+
+# Load the Zephyr pip requirements
+pip_parse(
+    name = "py_deps",
+    python_interpreter_target = interpreter,
+    requirements_lock = "@@zephyr//scripts:requirements-base-lock.txt",
+)
+
+load("@py_deps//:requirements.bzl", zephyr_install_deps = "install_deps")
+
+zephyr_install_deps()

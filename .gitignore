@@ -4,3 +4,6 @@ bazel-*
 # Editor files
 *.swo
 *.swp
+
+# Custom python virtual environment
+.venv

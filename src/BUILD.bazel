@@ -12,8 +12,13 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 load("//:echo.bzl", "stm32_cc_binary")
-
+load("@zephyr//:defs.bzl", "dts_cc_library")
 package(default_visibility = ["//visibility:public"])
+
+dts_cc_library(
+    name = "app_dts",
+    dts_lib = "@zephyr//boards/native/native_sim:native_sim",
+)
 
 cc_binary(
     name = "echo",
@@ -23,18 +28,27 @@ cc_binary(
         "//conditions:default": "@bazel_tools//tools/cpp:malloc",
     }),
     deps = [
-        "//src/pw_devicetree:pw_devicetree",
         "@pigweed//pw_boot",
         "@pigweed//pw_log",
         "@pigweed//pw_sys_io",
         "@pigweed//targets:pw_assert_backend_impl",
+        "@zephyr//:zephyr",
+        ":app_dts",
     ] + select({
         "@platforms//cpu:armv7e-m": [
             "@pigweed//pw_toolchain/arm_gcc:arm_none_eabi_gcc_support",
             "@pigweed//targets/stm32f429i_disc1:basic_linker_script",
             "@pigweed//targets/stm32f429i_disc1:pre_init",
         ],
-        "//conditions:default": [],
+        "//conditions:default": [
+            "@zephyr//:posix",
+        ],
+    }),
+    copts = select({
+        "@platforms//cpu:armv7e-m": [],
+        "//conditions:default": [
+            "-DCONFIG_ARCH_POSIX=1",
+        ],
     }),
 )
 
