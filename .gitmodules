@@ -5,4 +5,4 @@
 [submodule "third_party/zephyr"]
 	path = third_party/zephyr
 	url = git@github.com:yperess/zephyr.git
-	branch = zephyr-bazel
+	branch = main
